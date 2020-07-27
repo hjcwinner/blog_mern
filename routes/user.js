@@ -1,5 +1,8 @@
 const express = require('express')
 const router = express.Router()
+const bcrypt = require('bcryptjs')
+
+const userModel = require('../model/user')
 
 
 
@@ -8,8 +11,59 @@ const router = express.Router()
 // @desc   Register user
 // @access Public
 router.post('/register', (req, res) => {
-
-})
+    // email유무체크 => password암호화 => 회원가입
+    userModel
+        .findOne({email : req.body.email})
+        .then(user => {
+            if(user) 
+            {
+                return res.json({
+                    message : "email already exists"
+                })
+            }
+            else
+            {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                    if(err)
+                    {
+                        return res.json({
+                            message : err.message
+                        })
+                    }
+                    else 
+                    {
+                        const newUser = new userModel({
+                            name : req.body.name,
+                            email : req.body.email,
+                            password : hash
+                        })
+            
+                        newUser
+                            .save()
+                            .then(doc => {
+                                res.json({
+                                    id : doc._id,
+                                    name : doc.name,
+                                    email : doc.email,
+                                    password : doc.password
+                                })
+                            })
+                            .catch(err => {
+                                res.json({
+                                    message : err.message
+                                })
+                            })
+                            }
+                        })
+                    }  
+            }
+)
+        .catch(err => {
+            res.json({
+                message : err.message
+            })
+        })       
+    })
 
 
 
