@@ -1,8 +1,16 @@
 const express = require('express')
 const router = express.Router()
+const jwt = require('jsonwebtoken')
 
 const userModel = require('../model/user')
 
+function tokenGenerator(payload) {
+    return jwt.sign(
+        payload,
+        process.env.SECRET_KEY,
+        { expiresIn : '1d'}
+    )
+}
 
 
 // register
@@ -11,8 +19,9 @@ const userModel = require('../model/user')
 // @access Public
 router.post('/register', (req, res) => {
     // email유무체크 => password암호화 => 회원가입
+    const {email, name, password} = req.body
     userModel
-        .findOne({email : req.body.email})
+        .findOne({email})
         .then(user => {
             if(user) 
             {
@@ -23,9 +32,7 @@ router.post('/register', (req, res) => {
             else
             {
                 const newUser = new userModel({
-                    name : req.body.name,
-                    email : req.body.email,
-                    password : req.body.password
+                    name, email, password
                 })
                 newUser
                     .save()
@@ -62,8 +69,9 @@ router.post('/register', (req, res) => {
 // @access  Public
 router.post('/login', (req, res) => {
     // email유무 체크 => password복호화 => login(jwt반환)
+    const {email, password} = req.body
     userModel
-        .findOne({email : req.body.email})
+        .findOne({email})
         .then(user => {
             if(!user)
             {
@@ -73,7 +81,7 @@ router.post('/login', (req, res) => {
             }
             else
             {
-                user.comparePassword(req.body.password, (err, isMatch) => {
+                user.comparePassword(password, (err, isMatch) => {
                     if(err || isMatch === false)
                     {
                         return res.json({
@@ -83,8 +91,15 @@ router.post('/login', (req, res) => {
                     }
                     else
                     {
+                        const payload = {id : user._id, email : user.email, name : user.name, avatar : user.avatar}
+                        // const token = jwt.sign(
+                        //     payload,
+                        //     process.env.SECRET_KEY,
+                        //     { expiresIn : 120 }
+                        // )
                         res.json({
-                            successful : isMatch
+                            successful : isMatch,
+                            token : tokenGenerator(payload)
                         })
                     }
                 })
