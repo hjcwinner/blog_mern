@@ -6,6 +6,9 @@ const dotEnv = require('dotenv')
 dotEnv.config()
 
 
+const userRoutes = require('./routes/user')
+
+
 ////database
 require('./config/database')
 
@@ -18,6 +21,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 
 ////routing
+app.use('/user', userRoutes)
+
 
 
 const port = process.env.PORT
