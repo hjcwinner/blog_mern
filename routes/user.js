@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const bcrypt = require('bcryptjs')
 
 const userModel = require('../model/user')
 
@@ -74,17 +73,18 @@ router.post('/login', (req, res) => {
             }
             else
             {
-                bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+                user.comparePassword(req.body.password, (err, isMatch) => {
                     if(err || isMatch === false)
                     {
                         return res.json({
                             message : "password incorrect"
                         })
+                
                     }
                     else
                     {
                         res.json({
-                            message : "successful login"
+                            successful : isMatch
                         })
                     }
                 })
