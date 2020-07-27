@@ -24,59 +24,35 @@ router.post('/register', (req, res) => {
             }
             else
             {
-                // avatar자동생성
-                const avatar = gravatar.url(req.body.email, {
-                    s: '200',
-                    r: 'pg',
-                    d: 'mm'
+                const newUser = new userModel({
+                    name : req.body.name,
+                    email : req.body.email,
+                    password : req.body.password
                 })
-
-
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
-                    if(err)
-                    {
-                        return res.json({
+                newUser
+                    .save()
+                    .then(doc => {
+                        res.json({
+                            id : doc._id,
+                            name : doc.name,
+                            email : doc.email,
+                            password : doc.password,
+                            avatar : doc.avatar
+                        })
+                    })
+                    .catch(err => {
+                        res.json({
                             message : err.message
                         })
-                    }
-                    else 
-                    {
-                        const newUser = new userModel({
-                            name : req.body.name,
-                            email : req.body.email,
-                            password : hash,
-                            avatar : avatar
-                        })
-            
-                        newUser
-                            .save()
-                            .then(doc => {
-                                res.json({
-                                    id : doc._id,
-                                    name : doc.name,
-                                    email : doc.email,
-                                    password : doc.password,
-                                    avatar : doc.avatar
-                                })
-                            })
-                            .catch(err => {
-                                res.json({
-                                    message : err.message
-                                })
-                            })
-                            }
-                        })
-                    }  
+                    }) 
             }
-)
+        })
         .catch(err => {
             res.json({
                 message : err.message
             })
         })       
     })
-
-
 
 
 
