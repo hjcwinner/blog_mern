@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
-const gravatar = require('gravatar')
 
 const userModel = require('../model/user')
 
@@ -52,7 +51,7 @@ router.post('/register', (req, res) => {
                 message : err.message
             })
         })       
-    })
+})
 
 
 
@@ -63,6 +62,39 @@ router.post('/register', (req, res) => {
 // @desc    login user / return jwt
 // @access  Public
 router.post('/login', (req, res) => {
+    // email유무 체크 => password복호화 => login(jwt반환)
+    userModel
+        .findOne({email : req.body.email})
+        .then(user => {
+            if(!user)
+            {
+                return res.json({
+                    message : "no email"
+                })
+            }
+            else
+            {
+                bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
+                    if(err || isMatch === false)
+                    {
+                        return res.json({
+                            message : "password incorrect"
+                        })
+                    }
+                    else
+                    {
+                        res.json({
+                            message : "successful login"
+                        })
+                    }
+                })
+            }
+        })
+        .catch(err => {
+            res.json({
+                message : err.message
+            })
+        })
 
 })
 
