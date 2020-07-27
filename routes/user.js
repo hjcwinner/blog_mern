@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar')
 
 const userModel = require('../model/user')
 
@@ -23,6 +24,14 @@ router.post('/register', (req, res) => {
             }
             else
             {
+                // avatar자동생성
+                const avatar = gravatar.url(req.body.email, {
+                    s: '200',
+                    r: 'pg',
+                    d: 'mm'
+                })
+
+
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if(err)
                     {
@@ -35,7 +44,8 @@ router.post('/register', (req, res) => {
                         const newUser = new userModel({
                             name : req.body.name,
                             email : req.body.email,
-                            password : hash
+                            password : hash,
+                            avatar : avatar
                         })
             
                         newUser
@@ -45,7 +55,8 @@ router.post('/register', (req, res) => {
                                     id : doc._id,
                                     name : doc.name,
                                     email : doc.email,
-                                    password : doc.password
+                                    password : doc.password,
+                                    avatar : doc.avatar
                                 })
                             })
                             .catch(err => {
