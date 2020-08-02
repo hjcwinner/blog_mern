@@ -15,7 +15,10 @@ const checkAuth = passport.authenticate('jwt', { session: false })
 // @desc   Register profile from user
 // @access Private
 router.post('/', checkAuth, (req, res) => {
+
     const profileFields = {}
+
+
     profileFields.user = req.user.id
     if(req.body.handle) profileFields.handle = req.body.handle
     if(req.body.company) profileFields.company = req.body.company
@@ -55,9 +58,40 @@ router.post('/', checkAuth, (req, res) => {
             })
         })
 
-
-
 })
+
+
+
+// @route  GET http://localhost:9090/profile
+// @desc   Get profile from currents user
+// @access Private
+router.get('/', checkAuth, (req, res) => {
+    profileModel
+        .findOne({user : req.user.id})
+        .populate("user",["name","email"])
+        .then(profile => {
+            if(!profile)
+            {
+                return res.status(200).json({
+                    message : "no profile"
+                })
+            }
+            else
+            {
+                res.status(200).json({
+                    message : "successful profileInfo",
+                    profileInfo : profile 
+                })
+            }
+            
+        })
+        .catch(err => {
+            res.status(500).json({
+                message : err.message
+            })
+        })
+})
+
 
 
 
