@@ -104,6 +104,46 @@ router.get('/', checkAuth, (req, res) => {
 })
 
 
+// @route  Delete http://localhost:9090/profile
+// @desc   Delete profile from currents user
+// @access Private
+router.delete('/', checkAuth, (req, res) => {
+    profileModel
+        .findOneAndDelete({user : req.user.id})
+        .then(() => {
+            res.status(200).json({
+                message : "deleted profile"
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                message : err.message
+            })
+        })
+})
+
+
+// @route  Get http://localhost:9090/profile/total
+// @desc   Get total profile
+// @access Public
+router.get('/total', (req, res) => {
+    profileModel
+        .find()
+        .then(docs => {
+            res.status(200).json({
+                count : docs.length,
+                profiles : docs
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                message : err.message
+            })
+        })
+})
+
+
+
 
 
 module.exports = router

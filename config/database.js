@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 mg_Option = {
     useNewUrlParser: true, 
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }
 
 mongoose
