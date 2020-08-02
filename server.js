@@ -13,7 +13,7 @@ const app = express()
 
 
 const userRoutes = require('./routes/user')
-
+const profileRoutes = require('./routes/profile')
 
 ////database
 require('./config/database')
@@ -31,7 +31,7 @@ require('./config/passport')(passport)
 
 ////routing
 app.use('/user', userRoutes)
-
+app.use('/profile', profileRoutes)
 
 
 const port = process.env.PORT
