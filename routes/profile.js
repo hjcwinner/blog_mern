@@ -12,7 +12,7 @@ const checkAuth = passport.authenticate('jwt', { session: false })
 
 
 // @route  POST http://localhost:9090/profile
-// @desc   Register profile from user
+// @desc   Register/Edit profile from user
 // @access Private
 router.post('/', checkAuth, (req, res) => {
 
@@ -37,10 +37,22 @@ router.post('/', checkAuth, (req, res) => {
         .then(profile => {
             if(profile)
             {
-                // profile정보가 있으면
-                return res.status(400).json({
-                    message : "profile already exists, please update profile"
-                })
+                // profile정보가 있으면 메세지 출력
+                // return res.status(400).json({
+                //     message : "profile already exists, please update profile"
+                // })
+
+                // profile 정보가 있으면 수정
+                profileModel
+                    .findOneAndUpdate(
+                        {user : req.user.id },
+                        { $set : profileFields },
+                        { new: true }
+                    )
+                    .then(profile => res.status(200).json(profile))
+                    .catch(err => res.status(404).json(err.message))
+
+
             }
             else
             {
@@ -82,8 +94,7 @@ router.get('/', checkAuth, (req, res) => {
                     message : "successful profileInfo",
                     profileInfo : profile 
                 })
-            }
-            
+            }           
         })
         .catch(err => {
             res.status(500).json({

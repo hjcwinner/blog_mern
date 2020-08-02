@@ -48,9 +48,6 @@ router.get('/current', checkAuth, (req, res) => {
                 message : err.message
             })
         })
-    
-
-
 })
 
 
