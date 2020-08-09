@@ -62,8 +62,4 @@ router.get('/current', checkAuth, (req, res) => {
 
 // detail유저불러오기
 
-
-
-
-
 module.exports = router

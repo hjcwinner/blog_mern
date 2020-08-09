@@ -36,3 +36,9 @@ exports.validProfile = [
     check('skills', 'skills is required').notEmpty(),
     
 ]
+
+exports.validPost = [
+    check('text', 'text is required').notEmpty()
+        .isLength( { min : 10, max : 50 })
+        .withMessage('text must be between 10 to 50 characters')
+]

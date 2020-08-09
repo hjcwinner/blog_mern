@@ -14,6 +14,7 @@ const app = express()
 
 const userRoutes = require('./routes/user')
 const profileRoutes = require('./routes/profile')
+const postRoutes = require('./routes/post')
 
 ////database
 require('./config/database')
@@ -32,7 +33,7 @@ require('./config/passport')(passport)
 ////routing
 app.use('/user', userRoutes)
 app.use('/profile', profileRoutes)
-
+app.use('/post', postRoutes)
 
 const port = process.env.PORT
 app.listen(port, console.log(`server started at ${port}`))
