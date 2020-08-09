@@ -11,7 +11,8 @@ const checkAuth = passport.authenticate('jwt', { session: false })
 
 
 const {
-    validSignup
+    validSignup,
+    validSignin
 } = require('../helper/validation')
 
 
@@ -27,7 +28,7 @@ router.post('/register', validSignup, userRegister)
 // @route   POST http://localhost:9090/user/login
 // @desc    login user / return jwt
 // @access  Public
-router.post('/login', userlogin)
+router.post('/login', validSignin, userlogin)
 
 
 

@@ -72,7 +72,16 @@ exports.userRegister = (req, res) => {
 exports.userlogin = (req, res) => {
     // email유무 체크 => password복호화 => login(jwt반환)
     const {email, password} = req.body
-    userModel
+    
+    const errors = validationResult(req)
+
+    if(errors)
+    {
+        return res.status(404).json(errors)
+    }
+    else
+    {
+        userModel
         .findOne({email})
         .then(user => {
             if(!user)
@@ -107,5 +116,8 @@ exports.userlogin = (req, res) => {
                 message : err.message
             })
         })
+    }
+
+    
 
 }
