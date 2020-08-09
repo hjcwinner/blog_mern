@@ -2,19 +2,23 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
+const { validationResult } = require('express-validator')
 
 const profileModel = require('../model/profile')
 
 
 const checkAuth = passport.authenticate('jwt', { session: false })
-
+const {
+     validProfile
+} = require('../helper/validation')
 
 
 
 // @route  POST http://localhost:9090/profile
 // @desc   Register/Edit profile from user
 // @access Private
-router.post('/', checkAuth, (req, res) => {
+router.post('/', validProfile, checkAuth, (req, res) => {
+    
 
     const profileFields = {}
 
@@ -30,9 +34,15 @@ router.post('/', checkAuth, (req, res) => {
     if(typeof req.body.skills !== 'undefined') {
         profileFields.skills = req.body.skills.split(',')
     }
-
-
-    profileModel
+    
+    const errors = validationResult(req)
+    if(!errors.isEmpty())
+    {
+        return res.status(404).json(errors)
+    }
+    else
+    {
+        profileModel
         .findOne({user : req.user.id})
         .then(profile => {
             if(profile)
@@ -69,6 +79,9 @@ router.post('/', checkAuth, (req, res) => {
                 message : err.message
             })
         })
+    }
+
+    
 
 })
 

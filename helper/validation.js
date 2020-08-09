@@ -27,3 +27,12 @@ exports.validSignin = [
         .matches(/\d/)
         .withMessage('Password must contain a number')
 ]
+
+exports.validProfile = [
+    check('handle', 'Handle is required').notEmpty()
+       .isLength( {min : 4, max : 25 } )
+       .withMessage('handle must be between 4 to 25 characters'),
+    check('status', 'status is required').notEmpty(),
+    check('skills', 'skills is required').notEmpty(),
+    
+]
