@@ -75,7 +75,7 @@ exports.userlogin = (req, res) => {
     
     const errors = validationResult(req)
 
-    if(errors)
+    if(!errors.isEmpty())
     {
         return res.status(404).json(errors)
     }
