@@ -10,11 +10,17 @@ const { userRegister, userlogin } = require('../controllers/user')
 const checkAuth = passport.authenticate('jwt', { session: false })
 
 
+const {
+    validSignup
+} = require('../helper/validation')
+
+
+
 // register
 // @route  POST http://localhost:9090/user/register
 // @desc   Register user
 // @access Public
-router.post('/register', userRegister)
+router.post('/register', validSignup, userRegister)
 
 
 // login

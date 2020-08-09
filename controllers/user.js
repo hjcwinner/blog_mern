@@ -1,6 +1,13 @@
 
 
 const jwt = require('jsonwebtoken')
+const { validationResult } = require('express-validator')
+
+
+
+
+
+
 const userModel = require('../model/user')
 
 function tokenGenerator(payload) {
@@ -14,43 +21,52 @@ function tokenGenerator(payload) {
 exports.userRegister = (req, res) => {
     // email유무체크 => password암호화 => 회원가입
     const {email, name, password} = req.body
-    userModel
-        .findOne({email})
-        .then(user => {
-            if(user) 
-            {
-                return res.json({
-                    message : "email already exists"
-                })
-            }
-            else
-            {
-                const newUser = new userModel({
-                    name, email, password
-                })
-                newUser
-                    .save()
-                    .then(doc => {
-                        res.json({
-                            id : doc._id,
-                            name : doc.name,
-                            email : doc.email,
-                            password : doc.password,
-                            avatar : doc.avatar
-                        })
+
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()) {
+        return res.status(404).json(errors)
+    }
+    else
+    {
+        userModel
+            .findOne({email})
+            .then(user => {
+                if(user) 
+                {
+                    return res.json({
+                        message : "email already exists"
                     })
-                    .catch(err => {
-                        res.json({
-                            message : err.message
+                }
+                else
+                {
+                    const newUser = new userModel({
+                        name, email, password
+                    })
+                    newUser
+                        .save()
+                        .then(doc => {
+                            res.json({
+                                id : doc._id,
+                                name : doc.name,
+                                email : doc.email,
+                                password : doc.password,
+                                avatar : doc.avatar
+                            })
                         })
-                    }) 
-            }
-        })
-        .catch(err => {
-            res.json({
-                message : err.message
+                        .catch(err => {
+                            res.json({
+                                message : err.message
+                            })
+                        }) 
+                }
             })
-        })       
+            .catch(err => {
+                res.json({
+                    message : err.message
+                })
+            })  
+    }    
 }
 
 exports.userlogin = (req, res) => {
