@@ -155,7 +155,41 @@ router.get('/total', (req, res) => {
         })
 })
 
+// @route  Post http://localhost:9090/profile/experience
+// @desc   Add experience to profile
+// @access Private
+router.post('/experience', checkAuth, (req, res) => {
+    // valid할것!!!
+    profileModel
+        .findOne({ user : req.user.id })
+        .then(profile => {
+            const newExp = {
+                title : req.body.title,
+                company : req.body.company,
+                location : req.body.location,
+                from : req.body.from,
+                to : req.body.to,
+                current :  req.body.current,
+                description : req.body.description
+            }
+    
+            profile.experience.unshift(newExp)
+            profile
+                .save()
+                .then(profile => res.status(200).json(profile))
+                .catch(err => res.status(404).json(err.message))
+            
 
+        })
+        .catch(err => {
+            res.status(500).json({
+                message : err.message
+            })
+        })
+    
+
+        
+})
 
 
 
