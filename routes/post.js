@@ -118,5 +118,36 @@ router.post('/comment/:postid', checkAuth, (req, res) => {
         })
 })
 
+//@router   Delete  http://localhost:3030/post/comment/:posttid/:commentid
+//@desc     DElete comment from post
+//@access   Private
+router.delete('/comment/:postid/:commentid', checkAuth, (req, res) => {
+    postModel
+        .findById(req.params.postid)
+        .then(post => {
+            if(post.comments.filter(comment => comment.id.toString() === req.params.commentid).length === 0)
+            {
+                return res.status(400).json({
+                    message : "You have not comment this post"
+                })
+        
+            }
+            else
+            {
+                 const removeIndex = post.comments
+                    .map(item => item.id.toString())   
+                    .indexOf(req.params.commentid)
+                    post.comments.splice(removeIndex, 1)
+
+                    post.save().then(post => res.status(200).json(post))
+            }
+        })
+        .catch(err => {
+            res.status(404).json({
+                message : err.message
+            })
+        })
+})
+
 
 module.exports = router
