@@ -36,7 +36,10 @@ exports.post_get_total = (req, res) => {
         .find()
         .populate('user', ["name", "email", "avatar"])
         .then(posts => {
-            res.status(200).json(posts)
+            res.status(200).json({
+                count : posts.length,
+                posts : posts
+            })
         })
         .catch(err => {
             res.status(404).json({
