@@ -103,6 +103,46 @@ exports.userRegister = (req, res) => {
     }    
 }
 
+
+exports.accountActivation = (req, res) => {
+    const { token } = req.body
+
+    if(token)
+    {
+        jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {
+            if(err)
+            {
+                return res.status(401).json({
+                    errors : 'Expired link, Signup again'
+                })
+            }
+            else
+            {
+                const { name, email, password } = jwt.decode(token)
+                const user = new userModel({
+                    name, email, password
+                })
+
+                user
+                    .save()
+                    .then(user => {
+                        res.status(200).json({
+                            success : true,
+                            message : 'Signup success',
+                            userInfo : user
+                        })
+                    })
+                    .catch(err => {
+                        res.status(404).json({
+                            message : err.message
+                        })
+                    })
+            }
+        })
+    }
+}
+
+
 exports.userlogin = (req, res) => {
     // email유무 체크 => password복호화 => login(jwt반환)
     const {email, password} = req.body

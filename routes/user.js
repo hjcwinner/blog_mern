@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-const { userRegister, userlogin, user_current, user_get_all, user_get_detail } = require('../controllers/user')
+const { userRegister, userlogin, user_current, user_get_all, user_get_detail, accountActivation } = require('../controllers/user')
 
 const checkAuth = passport.authenticate('jwt', { session: false })
 
@@ -16,9 +16,16 @@ const {
 
 // register
 // @route  POST http://localhost:9090/user/register
-// @desc   Register user
+// @desc   Register user / send email
 // @access Public
 router.post('/register', validSignup, userRegister)
+
+// activation account
+// @route  POST http://localhost:9090/user/activation
+// @desc   Activation account / confirm email
+// @access private
+router.post('/activation', accountActivation)
+
 
 
 // login
