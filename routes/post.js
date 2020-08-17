@@ -41,7 +41,7 @@ router.patch('/:postid', checkAuth, post_patch)
 //@router   POST  http://localhost:3030/post/like/:postid
 //@desc     Like post
 //@access   Private
-router.post('/likes/:postid', checkAuth, (req, res) => {
+router.post('/like/:postid', checkAuth, (req, res) => {
     postModel
         .findById(req.params.postid)
         .then(post => {
@@ -62,5 +62,37 @@ router.post('/likes/:postid', checkAuth, (req, res) => {
             })
         })
 })
+
+//@router   POST http://localhost:3030/post/unlike/:postid
+//@desc     Unlike post
+//@access   private
+router.post('/unlike/:postid', checkAuth, (req, res) => {
+    postModel
+        .findById(req.params.postid)
+        .then(post => {
+            if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+                return res.status(400).json({
+                    message : "you have not liked this post"
+                })
+            }
+            else
+            {
+                const removeIndex = post.likes
+                    .map(item => item.user.toString())
+                    .indexOf(req.user.id)
+                post.likes.splice(removeIndex, 1)
+
+                post.save().then(post => res.status(200).json(post))
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message : err.message
+            })
+        })
+})
+
+
+
 
 module.exports = router
