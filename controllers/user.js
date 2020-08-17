@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.MAIL_KEY)
+
 
 
 const userModel = require('../model/user')
@@ -34,25 +37,62 @@ exports.userRegister = (req, res) => {
                 }
                 else
                 {
-                    const newUser = new userModel({
-                        name, email, password
-                    })
-                    newUser
-                        .save()
-                        .then(doc => {
-                            res.json({
-                                id : doc._id,
-                                name : doc.name,
-                                email : doc.email,
-                                password : doc.password,
-                                avatar : doc.avatar
+                    const payload = { name, email, password }
+
+                    const token = jwt.sign(
+                        payload,
+                        process.env.SECRET_KEY,
+                        { expiresIn : '20m'}
+                    )
+
+
+                    const emailData = {
+                        from: process.env.EMAIL_FROM,
+                        to : email,
+                        subject : 'Account activation link',
+                        html :`
+                            <h1>Please use the following to activate your account</h1>
+                            <p>http://localhost:3000/users/activate/${token}</p>
+                            <hr />
+                            <p>This email may containe sensetive information</p>
+                            <p>http://localhost:3000</p>
+                            
+                        `
+                    }
+
+                    sgMail
+                        .send(emailData)
+                        .then(() => {
+                            res.status(200).json({
+                                message : `Email has been sent to ${email}`
                             })
                         })
                         .catch(err => {
-                            res.json({
+                            res.status(404).json({
                                 message : err.message
                             })
-                        }) 
+                        })
+
+
+                    // const newUser = new userModel({
+                    //     name, email, password
+                    // })
+                    // newUser
+                    //     .save()
+                    //     .then(doc => {
+                    //         res.json({
+                    //             id : doc._id,
+                    //             name : doc.name,
+                    //             email : doc.email,
+                    //             password : doc.password,
+                    //             avatar : doc.avatar
+                    //         })
+                    //     })
+                    //     .catch(err => {
+                    //         res.json({
+                    //             message : err.message
+                    //         })
+                    //     }) 
                 }
             })
             .catch(err => {
