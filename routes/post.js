@@ -92,7 +92,31 @@ router.post('/unlike/:postid', checkAuth, (req, res) => {
         })
 })
 
+//@router   POST  http://localhost:3030/post/comment/:postid
+//@desc     Add comment to post
+//@access   Private
+router.post('/comment/:postid', checkAuth, (req, res) => {
+    postModel
+        .findById(req.params.postid)
+        .then(post => {
+            const newComment = {
+                text : req.body.text,
+                user : req.user.id,
+                name : req.user.name,
+                avatar : req.user.avatar
+            }
 
+            post.comments.unshift(newComment)
+            post
+                .save().then(post => res.status(200).json(post))
+
+        })
+        .catch(err => {
+            res.status(404).json({
+                message : err.message
+            })
+        })
+})
 
 
 module.exports = router
