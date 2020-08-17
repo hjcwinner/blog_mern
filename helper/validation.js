@@ -42,3 +42,27 @@ exports.validPost = [
         .isLength( { min : 10, max : 50 })
         .withMessage('text must be between 10 to 50 characters')
 ]
+
+exports.validExp = [
+    check('title', 'Title is required').notEmpty()
+        .isLength({ min : 4, max : 35 })
+        .withMessage('title must be between 4 to 35 characters'),
+    check('company', 'company is required').notEmpty()
+        .isLength({ min : 4, max : 35 })
+        .withMessage('company must be between 4 to 35 characters'),
+    check('from', 'From is required').notEmpty()
+]
+
+exports.validEdu = [
+    check('school', 'school is required').notEmpty()
+        .isLength({ min : 4, max : 35 })
+        .withMessage('school must be between 4 to 35 characters'),
+    check('degree', 'degree is required').notEmpty()
+        .isLength({ min : 4, max : 35 })
+        .withMessage('degree must be between 4 to 35 characters'),
+    check('fieldofstudy', 'fieldofstudy is required').notEmpty()
+        .isLength({ min : 4, max : 35 })
+        .withMessage('fieldofstudy must be between 4 to 35 characters'),
+    check('from', 'From is required').notEmpty()
+]
+

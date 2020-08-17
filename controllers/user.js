@@ -1,11 +1,5 @@
-
-
 const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
-
-
-
-
 
 
 const userModel = require('../model/user')
@@ -117,7 +111,53 @@ exports.userlogin = (req, res) => {
             })
         })
     }
+}
 
-    
+exports.user_current = (req, res) => {
 
+    // res.status(200).json({
+    //     id : req.user.id,
+    //     email : req.user.email,
+    //     name : req.user.name
+    // })
+
+    userModel
+        .findById(req.user.id)
+        .then(user => {
+            res.status(200).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message : err.message
+            })
+        })
+}
+
+exports.user_get_all = (req, res) => {
+    userModel
+        .find()
+        .then(users => {
+            res.status(200).json({
+                count : users.length,
+                userInfo : users
+            })
+        })
+        .catch(err => {
+            res.status(400).json({
+                message : err.message
+            })
+        })        
+}
+
+exports.user_get_detail = (req, res) => {
+    userModel
+        .findById(req.params.userid)
+        .then(user => {
+            res.status(200).json(user)
+        })
+        .catch(err => {
+            res.status(400).json({
+                message : err.message
+            })
+        }) 
 }

@@ -2,10 +2,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-
-
-const userModel = require('../model/user')
-const { userRegister, userlogin } = require('../controllers/user')
+const { userRegister, userlogin, user_current, user_get_all, user_get_detail } = require('../controllers/user')
 
 const checkAuth = passport.authenticate('jwt', { session: false })
 
@@ -31,35 +28,25 @@ router.post('/register', validSignup, userRegister)
 router.post('/login', validSignin, userlogin)
 
 
-
-
 // current user
 // @route   GET http://localhost:9090/user/current
 // @desc    get current user from jwt
 // @access  Private
-router.get('/current', checkAuth, (req, res) => {
-
-    // res.status(200).json({
-    //     id : req.user.id,
-    //     email : req.user.email,
-    //     name : req.user.name
-    // })
-
-    userModel
-        .findById(req.user.id)
-        .then(user => {
-            res.status(200).json(user)
-        })
-        .catch(err => {
-            res.status(500).json({
-                message : err.message
-            })
-        })
-})
+router.get('/current', checkAuth, user_current)
 
 
-// 전체유저불러오기
+// get      All user
+// @route   GET http://localhost:9090/user
+// @desc    get user all
+// @access  public
+router.get('/', user_get_all)
 
-// detail유저불러오기
+
+// get      Detail user
+// @route   GET http://localhost:9090/user:userid
+// @desc    GET user detail
+// @access  public
+router.get('/:userid', user_get_detail)
+
 
 module.exports = router
