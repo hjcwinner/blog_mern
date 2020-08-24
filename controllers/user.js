@@ -72,27 +72,6 @@ exports.userRegister = (req, res) => {
                                 message : err.message
                             })
                         })
-
-
-                    // const newUser = new userModel({
-                    //     name, email, password
-                    // })
-                    // newUser
-                    //     .save()
-                    //     .then(doc => {
-                    //         res.json({
-                    //             id : doc._id,
-                    //             name : doc.name,
-                    //             email : doc.email,
-                    //             password : doc.password,
-                    //             avatar : doc.avatar
-                    //         })
-                    //     })
-                    //     .catch(err => {
-                    //         res.json({
-                    //             message : err.message
-                    //         })
-                    //     }) 
                 }
             })
             .catch(err => {
@@ -102,7 +81,6 @@ exports.userRegister = (req, res) => {
             })  
     }    
 }
-
 
 exports.accountActivation = (req, res) => {
     const { token } = req.body
@@ -141,7 +119,6 @@ exports.accountActivation = (req, res) => {
         })
     }
 }
-
 
 exports.userlogin = (req, res) => {
     // email유무 체크 => password복호화 => login(jwt반환)
