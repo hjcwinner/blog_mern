@@ -13,6 +13,17 @@ const Register = () => {
     const { name, email, password, password2 } = formData
 
     const onChange = e => {
+        setFormData({...formData, [e.target.name]: e.target.value})
+    }
+
+    const onSubmit = e => {
+        e.preventDefault();
+        if(password !== password2) {
+            console.log('Password do not match')
+        }
+        else{
+            console.log(formData)
+        }
 
     }
 
@@ -28,7 +39,7 @@ const Register = () => {
                     <p className='lead text-center'>
                         <i className='fas fa-user' /> Create Your Account
                     </p>
-                    <form className='form' >
+                    <form className='form' onSubmit={e => onSubmit(e)} >
                         <div className='form-group'>
                             <input 
                                 type='text'
