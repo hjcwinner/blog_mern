@@ -42,12 +42,12 @@ exports.userRegister = (req, res) => {
                     const token = jwt.sign(
                         payload,
                         process.env.SECRET_KEY,
-                        { expiresIn : '20m'}
+                        { expiresIn : '20m' }
                     )
 
 
                     const emailData = {
-                        from: process.env.EMAIL_FROM,
+                        from : "hjcwinner@naver.com",
                         to : email,
                         subject : 'Account activation link',
                         html :`
