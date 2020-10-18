@@ -68,7 +68,7 @@ exports.userRegister = (req, res) => {
                             })
                         })
                         .catch(err => {
-                            res.status(404).json({
+                            res.status(408).json({
                                 message : err.message
                             })
                         })
