@@ -22,6 +22,7 @@
 ---------------------
 **1. 빌딩 후 성공 화면**
 - 빌드에 성공하면 아래와 같은 화면(port number & MongoDB connect)이 나온다.
+
 ![2020-10-22 00;37;21](https://user-images.githubusercontent.com/67583080/96743658-32838380-13ff-11eb-83f9-b1941a069355.PNG)
 
 **2. 로그인시 Json-web-token을 이용한 token 발행**
