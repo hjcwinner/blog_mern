@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { login } from '../../actions/auth'
 
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
 
     const [formData, setFormData] = useState({
         email: "",
@@ -18,18 +20,17 @@ const Login = () => {
 
     const onSubmit = e => {
         e.preventDefault();
-        axios
-            .post("/user/login", formData)
-            .then(res => console.log(res.data))
-            .catch(err => console.log(err))
         console.log(formData)
+        login(formData)
+
+    }
+
+    if(isAuthenticated) {
+        return <Redirect to='/dashboard' />
     }
 
     return (
         <Fragment>
-            <div className='container'>
-                <div className='row'>
-                   <div className='col-md-8 m-auto'>
                         <h1 className='large text-primary text-center'>
                            Login
                         </h1>
@@ -62,11 +63,20 @@ const Login = () => {
                          <p className='my-1'>
                          no account? <Link to="/register">Register</Link>
                     </p>
-                    </div>
-                </div>
-            </div>
         </Fragment>
     );
 };
 
-export default Login;
+Login.propTypes = {
+    login : PropTypes.func.isRequired,
+    isAuthenticated : PropTypes.bool
+}
+
+const mapStateToProps = state => ({
+    isAuthenticated : state.auth.isAuthenticated
+})
+
+export default connect(
+    mapStateToProps,
+    { login }
+)(Login);

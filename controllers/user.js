@@ -169,8 +169,8 @@ exports.userlogin = (req, res) => {
         .then(user => {
             if(!user)
             {
-                return res.json({
-                    message : "no email"
+                return res.status(400).json({
+                    errors : [{ msg : "Invalid Credentials" }]
                 })
             }
             else
@@ -178,8 +178,8 @@ exports.userlogin = (req, res) => {
                 user.comparePassword(password, (err, isMatch) => {
                     if(err || isMatch === false)
                     {
-                        return res.json({
-                            message : "password incorrect"
+                        return res.status(404).json({
+                            errors : [{ msg : "password incorrect" }]
                         })
                 
                     }
