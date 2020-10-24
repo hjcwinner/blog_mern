@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 const Register = () => {
 
@@ -23,6 +24,10 @@ const Register = () => {
         }
         else{
             console.log(formData)
+            axios
+                .post("/user/register", formData)
+                .then(res => console.log(res))
+                .catch(err => console.log(err))
         }
 
     }

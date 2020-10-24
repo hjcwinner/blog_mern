@@ -26,59 +26,77 @@ exports.userRegister = (req, res) => {
     }
     else
     {
-        userModel
-            .findOne({email})
+        const user = new userModel({
+            name, email, password
+        })
+
+        user
+            .save()
             .then(user => {
-                if(user) 
-                {
-                    return res.json({
-                        message : "email already exists"
-                    })
-                }
-                else
-                {
-                    const payload = { name, email, password }
-
-                    const token = jwt.sign(
-                        payload,
-                        process.env.SECRET_KEY,
-                        { expiresIn : '20m' }
-                    )
-
-
-                    const emailData = {
-                        from : "hjcwinner@naver.com",
-                        to : email,
-                        subject : 'Account activation link',
-                        html :`
-                            <h1>Please use the following to activate your account</h1>
-                            <p>http://localhost:3000/users/activate/${token}</p>
-                            <hr />
-                            <p>This email may containe sensetive information</p>
-                            <p>http://localhost:3000</p>
-                            
-                        `
-                    }
-
-                    sgMail
-                        .send(emailData)
-                        .then(() => {
-                            res.status(200).json({
-                                message : `Email has been sent to ${email}`
-                            })
-                        })
-                        .catch(err => {
-                            res.status(404).json({
-                                message : err.message
-                            })
-                        })
-                }
+                res.status(200).json({
+                    success : true,
+                    message : 'Signup success',
+                    userInfo : user
+                })
             })
             .catch(err => {
-                res.json({
+                res.status(404).json({
                     message : err.message
                 })
-            })  
+            })
+        // userModel
+        //     .findOne({email})
+        //     .then(user => {
+        //         if(user) 
+        //         {
+        //             return res.json({
+        //                 message : "email already exists"
+        //             })
+        //         }
+        //         else
+        //         {
+        //             const payload = { name, email, password }
+
+        //             const token = jwt.sign(
+        //                 payload,
+        //                 process.env.SECRET_KEY,
+        //                 { expiresIn : '20m' }
+        //             )
+
+
+        //             const emailData = {
+        //                 from : "hjcwinner@naver.com",
+        //                 to : email,
+        //                 subject : 'Account activation link',
+        //                 html :`
+        //                     <h1>Please use the following to activate your account</h1>
+        //                     <p>http://localhost:3000/users/activate/${token}</p>
+        //                     <hr />
+        //                     <p>This email may containe sensetive information</p>
+        //                     <p>http://localhost:3000</p>
+                            
+        //                 `
+        //             }
+
+        //             sgMail
+        //                 .send(emailData)
+        //                 .then(() => {
+        //                     res.status(200).json({
+        //                         message : `Email has been sent to ${email}`
+        //                     })
+        //                 })
+        //                 .catch(err => {
+        //                     res.status(404).json({
+        //                         message : err.message
+        //                     })
+        //                 })
+        //         }
+        //     })
+        //     .catch(err => {
+            //     res.json({
+            //         message : err.message
+            //     })
+            // })  
     }    
 }
 

@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 
 const Login = () => {
@@ -17,6 +18,10 @@ const Login = () => {
 
     const onSubmit = e => {
         e.preventDefault();
+        axios
+            .post("/user/login", formData)
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err))
         console.log(formData)
     }
 
