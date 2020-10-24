@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { setAlert } from '../../actions/alert'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { register } from '../../actions/auth'
 
-const Register = ({setAlert}) => {
+const Register = ({setAlert, register}) => {
 
     const [formData, setFormData] = useState({
         name: "",
@@ -28,10 +28,11 @@ const Register = ({setAlert}) => {
         }
         else{
             console.log(formData)
-            axios
-                .post("/user/register", formData)
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
+            // axios
+            //     .post("/user/register", formData)
+            //     .then(res => console.log(res))
+            //     .catch(err => console.log(err))
+            register({ name, email, password })
         }
 
     }
@@ -50,7 +51,7 @@ const Register = ({setAlert}) => {
                             <input 
                                 type='text'
                                 placeholder='Name'
-                                required
+                                
                                 name='name'
                                 value={name}
                                 onChange={e => onChange(e)}
@@ -60,7 +61,7 @@ const Register = ({setAlert}) => {
                             <input 
                                 type='email'
                                 placeholder='Email'
-                                required
+                                
                                 name='email'
                                 value={email}
                                 onChange={e => onChange(e)}
@@ -77,7 +78,7 @@ const Register = ({setAlert}) => {
                                 name='password'
                                 value={password}
                                 onChange={e => onChange(e)}
-                                minLength='6'
+                                
                             />
                         </div>
                         <div className='form-group'>
@@ -88,7 +89,7 @@ const Register = ({setAlert}) => {
                                 name='password2'
                                 value={password2}
                                 onChange={e => onChange(e)}
-                                minLength='6'
+    
                             />
                         </div>
                         <input type='submit' className='btn btn-primary' value='Register' />
@@ -101,10 +102,11 @@ const Register = ({setAlert}) => {
 };
 
 Register.propTypes = {
-    setAlert: PropTypes.func.isRequired
+    setAlert: PropTypes.func.isRequired,
+    register : PropTypes.func.isRequired
   };
   
   export default connect(
     null,
-    { setAlert }
+    { setAlert, register }
   )(Register);

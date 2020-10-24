@@ -22,28 +22,42 @@ exports.userRegister = (req, res) => {
     const errors = validationResult(req)
 
     if(!errors.isEmpty()) {
+        console.log(errors)
         return res.status(404).json(errors)
     }
     else
     {
-        const user = new userModel({
-            name, email, password
-        })
-
-        user
-            .save()
+        userModel
+            .findOne({email})
             .then(user => {
-                res.status(200).json({
-                    success : true,
-                    message : 'Signup success',
-                    userInfo : user
-                })
+                if(user) 
+                {
+                    return res.status(408).json({
+                        errors : [{ msg: 'User already exists'}]
+                    })
+                }
+                else{
+                    const user = new userModel({
+                        name, email, password
+                    })
+            
+                    user
+                        .save()
+                        .then(user => {
+                            res.status(200).json({
+                                success : true,
+                                message : 'Signup success',
+                                userInfo : user
+                            })
+                        })
+                        .catch(err => {
+                            res.status(404).json({
+                                errors : [{ msg: err.message }]
+                            })
+                        })     
+                }
             })
-            .catch(err => {
-                res.status(404).json({
-                    message : err.message
-                })
-            })
+        
         // userModel
         //     .findOne({email})
         //     .then(user => {
