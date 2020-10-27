@@ -30,7 +30,7 @@
 ## 스터디노트
 ---------------------
 **1. 빌딩 후 성공 화면**
-- 빌드에 성공하면 아래와 같은 화면(port number & MongoDB connect)이 나온다.
+- 빌드에 성공하면 아래와 같은 화면(웹사이트 main & (Register & Login), port number & MongoDB connect)이 나온다.
 
 ![2020-10-27 20;37;21](https://user-images.githubusercontent.com/67583080/97296687-5417bb80-1894-11eb-8a72-ed3e156ef92b.PNG)
 ![2020-10-27 20;37;31](https://user-images.githubusercontent.com/67583080/97296694-55e17f00-1894-11eb-8d6c-7f45103c0410.PNG)
