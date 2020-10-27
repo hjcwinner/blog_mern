@@ -22,7 +22,7 @@
 * axios, redux
 * redux-devtool을 이용해서 타임라인 확인
 * expressJS, MongoDB
-* jsonwebtoken, bcryptjs, passport, gravatar
+* jsonwebtoken, bcryptjs, gravatar
 * passport, passport-jwt
 * postman을 이용해서 결과값 확인
 
