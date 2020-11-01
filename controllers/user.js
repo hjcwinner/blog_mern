@@ -37,34 +37,17 @@ exports.userRegister = (req, res) => {
                 }
                 else
                 {
-                    const payload = { name, email, password }
-
-                    const token = jwt.sign(
-                        payload,
-                        process.env.SECRET_KEY,
-                        { expiresIn : '20m' }
-                    )
-
-
-                    const emailData = {
-                        from : "hjcwinner@naver.com",
-                        to : email,
-                        subject : 'Account activation link',
-                        html :`
-                            <h1>Please use the following to activate your account</h1>
-                            <p>http://localhost:3000/users/activate/${token}</p>
-                            <hr />
-                            <p>This email may containe sensetive information</p>
-                            <p>http://localhost:3000</p>
-                            
-                        `
-                    }
-
-                    sgMail
-                        .send(emailData)
-                        .then(() => {
+                    const newUser = new userModel({
+                        name, email, password
+                    })
+                    
+                    newUser
+                        .save()
+                        .then(user => {
                             res.status(200).json({
-                                message : `Email has been sent to ${email}`
+                                success : true,
+                                message : 'Signup success',
+                                userInfo : user
                             })
                         })
                         .catch(err => {
