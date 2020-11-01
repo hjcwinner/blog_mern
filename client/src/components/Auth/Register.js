@@ -1,9 +1,11 @@
 import React, {Fragment, useState} from 'react';
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { register } from '../../actions/auth'
+import PropTypes from 'prop-types'
 
 
-const Register = () => {
+const Register = ({register}) => {
 
     const [ formData, setFormData ] = useState({
         name : "",
@@ -27,11 +29,12 @@ const Register = () => {
             console.log('Password do not match')
         }
         else {
-            console.log(formData)
-            axios
-                .post('/user/register', formData)
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
+            register({ name, email, password })
+             console.log(formData)
+            // axios
+            //     .post('/user/register', formData)
+            //     .then(res => console.log(res))
+            //     .catch(err => console.log(err))
         }
 
     }
@@ -89,4 +92,11 @@ const Register = () => {
     );
 };
 
-export default Register;
+Register.propTypes = {
+    register : PropTypes.func.isRequired
+}
+
+export default connect(
+    null,
+    { register }
+)(Register);
