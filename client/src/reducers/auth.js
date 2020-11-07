@@ -1,8 +1,8 @@
 import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL } from '../actions/types'
 
 const initialState = {
-    isAuthenticated : null,
-    loading : true,
+    isAuthenticated : false,
+    loading : false,
     user : null
 }
 
