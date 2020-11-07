@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL } from '../actions/types'
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL } from '../actions/types'
 
 const initialState = {
     isAuthenticated : null,
@@ -11,6 +11,7 @@ export default function(state = initialState, action) {
 
     switch (type) {
         case REGISTER_SUCCESS:
+        case LOGIN_SUCCESS :
             return {
                 ...state,
                 ...payload,
@@ -18,6 +19,7 @@ export default function(state = initialState, action) {
                 loading : false
             }
         case REGISTER_FAIL:
+        case LOGIN_FAIL:
             return {
                 ...state,
                 isAuthenticated : false,
