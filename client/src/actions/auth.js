@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL } from './types'
+import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL, LOG_OUT } from './types'
 
 ///Register User
 export const register = ({ name, email, password }) => async dispatch => {
@@ -63,9 +63,10 @@ export const login = ({ email, password }) => async dispatch => {
             type : LOGIN_FAIL
         })
     }
+}
 
-
-
+export const logout = () => dispatch => {
+    dispatch({ type : LOG_OUT })
 }
 
 
